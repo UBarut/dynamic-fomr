@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Design</title>
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+
+</head>
+
+<body>
+    <!-- Birçok duruma göre formu dinamik olarak isteğe göre okumaya dayalı design edilecek.  -->
+    <main>
+        <form action="https://www.google.com.tr" id="form">
+            <div class="form-page active">
+                <div class="input-part">
+                    <div class="inner-input anim" type-pa data-placeholder="Name-Surname">
+                        <input type="text" class="namesurname" name="namesurname-1" id="namesurname-1" befill>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input anim" type-pa data-placeholder="Phone Number">
+                        <input type="tel" class="tel-input" name="phone-1" id="phone-1" befill
+                            data-pattern="(999) 999 99 99">
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input" type-ph data-placeholder="Email">
+                        <input type="email" class="" name="email-1" id="email-1" placeholder="" befill>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input" type-pu data-placeholder="Birthday">
+                        <input type="date" class="input-date" name="birthday-1" id="birthday-1" befill>
+                        <div class="input-icon"></div>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input anim" type-pu data-placeholder="First Work Year">
+                        <input type="number" class="year" name="year-1" id="year-1" min="1960" max="2022" maxlength="4">
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input file-input" type-pu data-placeholder="Profile Photo">
+                        <input type="file" name="photo-1" id="photo-1">
+                        <!-- Görsel tasarımı buraya koyabilirsin -->
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input file-input" type-ph data-placeholder="Textarea 1">
+                        <textarea minlength="8" maxlength="100"></textarea>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+            </div>
+            <div class="form-page">
+                <div class="input-part">
+                    <div class="inner-input anim" type-pa data-placeholder="Name-Surname-2">
+                        <input type="text" class="namesurname" name="namesurname-1" id="namesurname-1" befill>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input anim" type-pa data-placeholder="Phone Number-2">
+                        <input type="tel" class="tel-input" name="phone-1" id="phone-1" befill
+                            data-pattern="(999) 999 99 99">
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input" type-ph data-placeholder="Email-2">
+                        <input type="email" class="" name="email-1" id="email-1" placeholder="" befill>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input" type-pu data-placeholder="Birthday-2">
+                        <input type="date" class="input-date" name="birthday-1" id="birthday-1" befill>
+                        <div class="input-icon"></div>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input anim" type-pu data-placeholder="First Work Year-2">
+                        <input type="number" class="year" name="year-1" id="year-1" min="1960" max="2022" maxlength="4">
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input file-input" type-pu data-placeholder="Profile Photo-2">
+                        <input type="file" name="photo-1" id="photo-1">
+                        <!-- Görsel tasarımı buraya koyabilirsin -->
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input file-input" type-ph data-placeholder="Textarea 2">
+                        <textarea minlength="8" maxlength="100"></textarea>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+            </div>
+            <div class="form-page">
+                <div class="input-part">
+                    <div class="inner-input anim" type-pa data-placeholder="Name-Surname-3">
+                        <input type="text" class="namesurname" name="namesurname-1" id="namesurname-1" befill>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input anim" type-pa data-placeholder="Phone Number-3">
+                        <input type="tel" class="tel-input" name="phone-1" id="phone-1" befill
+                            data-pattern="(999) 999 99 99">
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input" type-ph data-placeholder="Email-3">
+                        <input type="email" class="" name="email-1" id="email-1" placeholder="" befill>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input" type-pu data-placeholder="Birthday-3">
+                        <input type="date" class="input-date" name="birthday-1" id="birthday-1" befill>
+                        <div class="input-icon"></div>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input anim" type-pu data-placeholder="First Work Year-3">
+                        <input type="number" class="year" name="year-1" id="year-1" min="1960" max="2022" maxlength="4">
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input file-input" type-pu data-placeholder="Profile Photo-3">
+                        <input type="file" name="photo-1" id="photo-1">
+                        <!-- Görsel tasarımı buraya koyabilirsin -->
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+                <div class="input-part">
+                    <div class="inner-input file-input" type-ph data-placeholder="Textarea 3">
+                        <textarea minlength="8" maxlength="100"></textarea>
+                    </div>
+                    <h5 class="input-error"></h5>
+                </div>
+            </div>
+            <div class="buttons">
+                <a method="button" class="button btn-form d-none">Prev</a>
+                <a method="button" class="button btn-form" forward-title="Next" submit-title="Submit"><span>Next</span></a>
+            </div>
+        </form>
+    </main>
+
+    <script src="/assets/js/jquery/jquery3.1.1.min.js"></script>
+    <script src="/assets/js/jquery/jquery.inputmask.bundle.js"></script>
+    <script src="/assets/js/script.js"></script>
+</body>
+
+</html>
