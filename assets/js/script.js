@@ -1,4 +1,3 @@
-
 function isNullOrEmpty(string) {
   if (string.trim() === null || string.trim() === '') {
     return true;
@@ -15,7 +14,7 @@ let buttons = document.querySelectorAll('.buttons .btn-form');
 let formStateValues = {}, formStateSuccess = {};
 let formsPagesLength = formPages.length - 1;
 let activeFormPageIndex = 0;
-const controlType = 'BUTTONS';
+const controlType = 'INPUTS';
 
 formPages.forEach((form, index) => {
   //Set Form State

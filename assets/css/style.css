@@ -149,6 +149,10 @@ form .form-page {
 form .form-page.active{
     display: flex;
 }
+form .form-page h3{
+    font-size: 32px;
+    color: white;
+}
 
 .input-part {
     position: relative;
@@ -274,6 +278,19 @@ input[type=file] + .file-input .btn-file{
     color: white;
     border-radius: 4px;
     padding: 8px;
+}
+input[type=file][unsuccess] + .file-input{
+    border: 1px solid #9d0000;
+}
+input[type=file][unsuccess] + .file-input .result::before{
+    color: #9d0000;
+}
+input[type=file][unsuccess] + .file-input .btn-file{
+    border: 1px solid #9d0000;
+    color: #9d0000;
+}
+input[type=file][success] + .file-input{
+    border: 1px solid #00897b;
 }
 input[success],textarea[success] {
     border: 1px solid #00897b;

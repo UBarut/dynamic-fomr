@@ -1,0 +1,65 @@
+form .form-page {
+  display: none;
+  flex-direction: column;
+}
+form .form-page.active {
+  display: flex;
+}
+form .form-page .input-part {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 0;
+}
+form .form-page .input-part:has(.input-error:not(.input-error:empty)) {
+  padding: 20px 0 10px;
+}
+form .form-page .input-part .inner-input {
+  max-width: inherit;
+  width: inherit;
+  position: relative;
+}
+form .form-page .input-part .inner-input::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  top: -4px;
+  left: 0;
+  transform: translateY(-100%);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  transition: all 0.4s linear;
+  color: white;
+}
+form .form-page .input-part .inner-input.anim::before, form .form-page .input-part .inner-input[type-placeholder=classic]::before {
+  top: 16px;
+  left: 16px;
+  transform: translateY(0%);
+  color: #969696;
+}
+form .form-page .input-part .inner-input.anim:has(> input:focus)::before, form .form-page .input-part .inner-input[type-placeholder=title]::before {
+  top: -4px;
+  left: 0;
+  transform: translateY(-100%);
+  color: white;
+}
+form .form-page .input-part .inner-input[type-placeholder=classic].hidden-ph::before {
+  display: none;
+}
+form .form-page .input-part .input-error {
+  font-size: 14px;
+  color: #9d0000;
+}
+form .form-page .input-part .input-error:empty {
+  display: none;
+}
+form .button[disabled] {
+  pointer-events: none;
+  background-color: #969696;
+}
+form .d-none {
+  display: none;
+}/*# sourceMappingURL=default.css.map */
