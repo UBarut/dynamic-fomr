@@ -11,25 +11,32 @@ function isNullOrEmpty(string) {
 // parameterObj = {
 //     controlType
 // }
-NodeList.prototype.formValidation = function (controlType, placeholderType) {
-    this.forEach(el => el.formValidation(controlType, placeholderType))
+let formStateValues = {}, formStateSuccess = {};
+NodeList.prototype.formValidation = function ({formIndex, controlType, placeholderType}) {
+    this.forEach((el, index) => {
+        el.formValidation({formIndex:index, controlType, placeholderType})
+        // console.log(index, controlType, placeholderType)
+    })
 }
-HTMLElement.prototype.formValidation = function (
+HTMLElement.prototype.formValidation = function ({
+    formIndex,
     controlType = 'BUTTONS',
     placeholderType = 'title'
 
-) {
-
+}) {
+    // console.log(formIndex, controlType, placeholderType)
     //Elements
     let formElm = this;
     let formPages = this.querySelectorAll('.form-page');
     let buttons = this.querySelectorAll('.buttons .btn-form');
     //Variables
-    let formStateValues = {}, formStateSuccess = {};
     let formsPagesLength = formPages.length - 1;
     let activeFormPageIndex = 0;
+    // formIndex = index;
+    formStateValues[formElm.id] = {activeFormPageIndex : 0,buttons : this.querySelectorAll('.buttons .btn-form')};
+    console.log(formStateValues[formElm.id].buttons)
+    formStateSuccess[formElm.id] = {};
     // const controlType = 'BUTTONS';
-    // console.log(buttons);
 
     const BeforeLoadForm = () => {
         //SetState
@@ -40,8 +47,8 @@ HTMLElement.prototype.formValidation = function (
                 list[input.id] = input.value;
                 list2[input.id] = input.hasAttribute('success') ? true : false;
             })
-            formStateValues[index] = list;
-            formStateSuccess[index] = list2;
+            formStateValues[formElm.id][index] = list;
+            formStateSuccess[formElm.id][index] = list2;
             //Input Listeners
             form.addEventListener('blur', function (e) {//change
                 //Placeholder Move Up
@@ -54,12 +61,11 @@ HTMLElement.prototype.formValidation = function (
                 }
             }, true)
         })
-        // console.log(formElm.querySelectorAll('input'));
         //Set Input Type
         formElm.querySelectorAll('input:is([type=text],[type=email],[type=number]),textarea').forEach(input => {
             input.closest('.inner-input').setAttribute('type-placeholder', placeholderType)
             placeholderType === 'anim' && input.closest('.inner-input').classList.add('anim')
-            placeholderType === 'placeholder' && input.closest('.inner-input').classList.add('placeholder')
+            // placeholderType === 'placeholder' && input.closest('.inner-input').classList.add('placeholder')
         })
 
         //Placeholder Design Method
@@ -75,11 +81,12 @@ HTMLElement.prototype.formValidation = function (
         activeFormPageIndex = Array.from(document.querySelectorAll('.form-page')).indexOf(document.querySelector('.form-page.active'))
         activeFormPageIndex === 0 ? buttons[0].classList.add('d-none')
             : buttons[0].classList.remove('d-none');
-            console.log(buttons[1])
+        // console.log(buttons[1])
         buttons[1].innerText = (formsPagesLength === activeFormPageIndex
             ? buttons[1].getAttribute('submit-title')
             : buttons[1].getAttribute('forward-title'));
         IsSuccessFormPage();
+        // console.log(formStateValues);
     };
     function SwitchBetweenPages() {
         buttons.forEach(button => {
@@ -139,18 +146,18 @@ HTMLElement.prototype.formValidation = function (
                 inputError && (inputError.innerText = '');
                 target.setAttribute('success', '');
                 target.removeAttribute('unsuccess');
-                target.id in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.id] = true);
+                target.id in formStateSuccess[formElm.id][activeFormPageIndex] && (formStateSuccess[formElm.id][activeFormPageIndex][target.id] = true);
                 break;
             case 'STATE_UNSUCCESS':
                 inputError && (inputError.innerText = messages[errorCode]);
                 target.setAttribute('unsuccess', '');
                 target.removeAttribute('success');
-                target.id in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.id] = false);
+                target.id in formStateSuccess[formElm.id][activeFormPageIndex] && (formStateSuccess[formElm.id][activeFormPageIndex][target.id] = false);
                 break;
             case 'STATE_EMPTY':
                 inputError && (inputError.innerText = '');
                 ['success', 'unsuccess'].forEach(attribute => target.removeAttribute(attribute));
-                target.id in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.id] = false)
+                target.id in formStateSuccess[formElm.id][activeFormPageIndex] && (formStateSuccess[formElm.id][activeFormPageIndex][target.id] = false)
                 break;
             default:
                 break;
@@ -453,20 +460,22 @@ HTMLElement.prototype.formValidation = function (
         let access = true;
         // console.log(controlType, parameterType);
         // if (controlType === parameterType) {
-        Array.from(document.querySelectorAll('.form-page.active input')).forEach(parameter => {
-            parameter.hasAttribute('unsuccess') && (access = false);
-        })
-        Object.values(formStateSuccess[activeFormPageIndex]).forEach(parameter => {
-            !parameter && (access = false);
-        })
-        controlType === 'INPUTS' && (access ? buttons[1].removeAttribute('disabled') : buttons[1].setAttribute('disabled', '') & console.log(buttons[1]));
-        if (parameterType === 'BUTTONS') {
-            for (const [key, value] of Object.entries(formStateSuccess[activeFormPageIndex])) {
-                let target = document.querySelector(`.form-page.active [id=${key}]`);
-                !value && SetStateOfInput(target, 'STATE_UNSUCCESS', 101);
-            }
-            return access;
-        };
+            Array.from(document.querySelectorAll('.form-page.active input')).forEach(parameter => {
+                parameter.hasAttribute('unsuccess') && (access = false);
+            })
+            Object.values(formStateSuccess[formElm.id][activeFormPageIndex]).forEach(parameter => {
+                !parameter && (access = false);
+            })
+            controlType === 'INPUTS' && (access ? buttons[1].removeAttribute('disabled') : buttons[1].setAttribute('disabled', ''));
+            if (parameterType === 'BUTTONS') {
+                for (const [key, value] of Object.entries(formStateSuccess[formElm.id][activeFormPageIndex])) {
+                    let target = document.querySelector(`.form-page.active [id=${key}]`);
+                    !value && SetStateOfInput(target, 'STATE_UNSUCCESS', 101);
+                }
+                return access;
+            };
+            console.log(formStateValues);
+        // }
     }
     BeforeLoadForm();
     SwitchBetweenPages();
