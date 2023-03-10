@@ -154,40 +154,40 @@
             <div class="form-page">
                 <h3>Page-3</h3>
                 <div class="input-part">
-                    <div class="inner-input" data-placeholder="Name-Surname-3">
-                        <input type="text" class="namesurname" name="namesurname-1" id="namesurname-1" befill>
+                    <div class="inner-input" data-placeholder="Name-Surname-2">
+                        <input type="text" class="namesurname" name="namesurname-2" id="namesurname-2" befill>
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input" data-placeholder="Phone Number-3">
-                        <input type="tel" class="tel-input" name="phone-1" id="phone-1" befill
+                    <div class="inner-input" data-placeholder="Phone Number-2">
+                        <input type="tel" class="tel-input" name="phone-2" id="phone-2" befill
                             data-pattern="(999) 999 99 99">
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input" data-placeholder="Email-3">
-                        <input type="email" class="" name="email-1" id="email-1" placeholder="" befill>
+                    <div class="inner-input" data-placeholder="Email-2">
+                        <input type="email" class="" name="email-2" id="email-2" placeholder="" befill>
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input" data-placeholder="Birthday-3">
-                        <input type="date" class="input-date" name="birthday-1" id="birthday-1" befill>
+                    <div class="inner-input" data-placeholder="Birthday-2">
+                        <input type="date" class="input-date" name="birthday-2" id="birthday-2" befill>
                         <div class="input-icon"></div>
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input" data-placeholder="First Work Year-3">
-                        <input type="number" class="year" name="year-1" id="year-1" min="1960" max="2022" maxlength="4">
+                    <div class="inner-input" data-placeholder="First Work Year-2">
+                        <input type="number" class="year" name="year-2" id="year-2" min="1960" max="2022" maxlength="4">
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input" data-placeholder="Profile Photo-3">
-                        <input type="file" name="photo-1" id="photo-1">
+                    <div class="inner-input" data-placeholder="Profile Photo-2">
+                        <input type="file" name="photo-2" id="photo-2">
                         <div class="file-input">
                             <p class="result" file-title="Import File" file-name>Import File</p>
                             <div class="btn-file">Click</div>
@@ -196,7 +196,7 @@
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input file-input" data-placeholder="Textarea 3">
+                    <div class="inner-input file-input" data-placeholder="Textarea 2">
                         <textarea minlength="8" maxlength="100"></textarea>
                     </div>
                     <h5 class="input-error"></h5>
@@ -208,12 +208,12 @@
                     submit-title="Submit"><span></span></a>
             </div>
         </form>
-        <form action="https://www.google.com.tr" id="ubForm2">
+        <!-- <form action="https://www.google.com.tr" id="ubForm2">
             <div class="form-page active">
                 <h3>Page-1</h3>
                 <div class="input-part">
                     <div class="inner-input" data-placeholder="Name-Surname">
-                        <input type="text" class="namesurname" name="namesurname-1" id="namesurname-1" minlength="5"
+                        <input type="text" class="namesurname" name="namesurname-0" id="namesurname-0" minlength="5"
                             maxlength="8" befill>
                     </div>
                     <h5 class="input-error"></h5>
@@ -345,7 +345,7 @@
                 <h3>Page-3</h3>
                 <div class="input-part">
                     <div class="inner-input" data-placeholder="Name-Surname-3">
-                        <input type="text" class="namesurname" name="namesurname-1" id="namesurname-1" befill>
+                        <input type="text" class="namesurname" name="namesurname-2" id="namesurname-2" befill>
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
@@ -397,7 +397,7 @@
                 <a method="button" class="button btn-form" forward-title="Next2"
                     submit-title="Submit"><span></span></a>
             </div>
-        </form>
+        </form> -->
     </main>
 
     <script src="/assets/js/jquery/jquery3.1.1.min.js"></script>
@@ -408,7 +408,8 @@
 <script>
     document.querySelectorAll('form').formValidation({
         controlType : 'INPUTS',
-        placeholderType : 'classic'
+        placeholderType : 'classic',
+        formCookies : true
     });
 </script>
 

@@ -180,6 +180,14 @@ input:is([type=text],
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: #fff !important;
 }
+input:is([type=text],
+[type=email],
+[type=tel],
+[type=number],
+[type=date]):-internal-autofill-selected {
+  background-color: transparent !important;
+  color: white !important;
+}
 
 textarea:focus,
 input:focus {
