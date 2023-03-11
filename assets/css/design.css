@@ -189,6 +189,30 @@ input:is([type=text],
   color: white !important;
 }
 
+input:is([type=text],
+[type=email],
+[type=tel],
+[type=number],
+[type=date]):disabled,
+textarea:disabled {
+  background-color: #969696;
+}
+input:is([type=text],
+[type=email],
+[type=tel],
+[type=number],
+[type=date]):disabled::-moz-placeholder, textarea:disabled::-moz-placeholder {
+  color: #282828;
+}
+input:is([type=text],
+[type=email],
+[type=tel],
+[type=number],
+[type=date]):disabled::placeholder,
+textarea:disabled::placeholder {
+  color: #282828;
+}
+
 textarea:focus,
 input:focus {
   outline: none;

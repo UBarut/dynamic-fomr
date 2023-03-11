@@ -32,17 +32,17 @@ HTMLElement.prototype.formValidation = function ({
     let activeFormPageIndex = formStateValues[formElm.id].activeFormPageIndex;
 
     const BeforeLoadForm = () => {
-    //SetState
+        //SetState
         formPages.forEach((form, index) => {
-        //Set Form State
+            //Set Form State
             let list = {}, list2 = {};
-            form.querySelectorAll('[befill]').forEach(input => {
+            form.querySelectorAll('[befill]:not([disabled])').forEach(input => {
                 input.tagName === 'INPUT' && (list[input.id] = input.value);
                 list2[input.id] = input.hasAttribute('success') ? true : false;
             })
             formStateValues[formElm.id][index] = list;
             formStateSuccess[formElm.id][index] = list2;
-        //Input Listeners
+            //Input Listeners
             form.addEventListener('blur', function (e) {//change
                 //Placeholder Move Up
                 if (e.target.closest('.inner-input[type-placeholder="anim"] input')) {
@@ -53,7 +53,7 @@ HTMLElement.prototype.formValidation = function ({
                 }
             }, true)
         })
-    //Placeholder Design Method
+        //Placeholder Design Method
         window.addEventListener('input', function (e) {
             if (e.target.closest('.inner-input[type-placeholder="classic"] :is(input,textarea)')) {
                 let target = e.target.closest('.input-part');
@@ -62,8 +62,8 @@ HTMLElement.prototype.formValidation = function ({
                     : target.querySelector('.inner-input').classList.add('hidden-ph');
             }
         })
-    //Set LocaleStroge
-        if(formCookies){
+        //Set LocaleStroge
+        if (formCookies) {
             let cookie = JSON.parse(localStorage.getItem(`formStorage-${formElm.id}`));
             if (cookie) {
                 formStateValues[formElm.id] = cookie;
@@ -74,14 +74,14 @@ HTMLElement.prototype.formValidation = function ({
                 }
             }
         }
-    //Set Input Type
+        //Set Input Type
         formElm.querySelectorAll('input:is([type=text],[type=email],[type=number]),textarea').forEach(input => {
             input.closest('.inner-input').setAttribute('type-placeholder', placeholderType);
             (placeholderType === 'anim' && input.value.length === 0) && input.closest('.inner-input').classList.add('anim');
-            
+
             (placeholderType === 'classic' && input.value.length != 0) && input.closest('.inner-input').classList.add('hidden-ph');
         })
-    //Set Button 
+        //Set Button 
         activeFormPageIndex = Array.from(document.querySelectorAll('.form-page')).indexOf(document.querySelector('.form-page.active'))
         activeFormPageIndex === 0 ? buttons[0].classList.add('d-none')
             : buttons[0].classList.remove('d-none');
@@ -89,7 +89,7 @@ HTMLElement.prototype.formValidation = function ({
             ? buttons[1].getAttribute('submit-title')
             : buttons[1].getAttribute('forward-title'));
         IsSuccessFormPage();
-    //Set Focused Form
+        //Set Focused Form
         let listEvent = ['blur', 'change'];
         listEvent.forEach(event => {
             window.addEventListener(event, function (e) {
@@ -100,7 +100,6 @@ HTMLElement.prototype.formValidation = function ({
                 }
             }, true)
         })
-        
     };
     function SwitchBetweenPages() {
         buttons.forEach(button => {
@@ -227,8 +226,8 @@ HTMLElement.prototype.formValidation = function ({
                                 SetStateOfInput(e.target, 'STATE_SUCCESS')
                             }
                         }
+                        IsSuccessFormPage('INPUTS');
                     }
-                    IsSuccessFormPage('INPUTS');
                 } catch (error) {
 
                 }
@@ -388,8 +387,8 @@ HTMLElement.prototype.formValidation = function ({
                         else {
                             SetStateOfInput(e.target, 'STATE_SUCCESS');
                         }
+                        IsSuccessFormPage('INPUTS');
                     }
-                    IsSuccessFormPage('INPUTS');
                 } catch (error) {
 
                 }
@@ -442,17 +441,49 @@ HTMLElement.prototype.formValidation = function ({
     }
     function RadioFieldset() {
         window.addEventListener('change', function (e) {
-            if (e.target.getAttribute('type') === 'radio') {
-                let fieldset = e.target.closest('fieldset');
-                let checkR = false;
-                fieldset.querySelectorAll('input[type=radio]').forEach(rb => {
-                    rb.checked && (checkR = true);
-                })
-                checkR
-                    ? SetStateOfInput(fieldset, 'STATE_SUCCESS')
-                    : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
+            try {
+                if (e.target.getAttribute('type') === 'radio') {
+                    TriggerRadio(e);
+                    let fieldset = e.target.closest('fieldset');
+                    let checkR = false;
+                    fieldset.querySelectorAll('input[type=radio]').forEach(rb => {
+                        rb.checked && (checkR = true);
+                    })
+                    checkR
+                        ? SetStateOfInput(fieldset, 'STATE_SUCCESS')
+                        : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
+                    console.log('RadioFieldset')
+                    IsSuccessFormPage('INPUTS');
+                }
+            } catch (error) {
+
             }
+
         }, true)
+    }
+    const TriggerRadio = (e) => {
+        // try {
+        // window.addEventListener('change', function (e) {
+        if (e.target.closest('[trigger-radio] input[type=radio]')) {
+            let fieldset = e.target.closest('[trigger-radio]')
+            let target = e.target.closest('[trigger-radio] input[type=radio]')
+            if (target.hasAttribute('radio-accept')) {
+                document.querySelectorAll(`[triggered-by-radio=${fieldset.id}] > :first-child`).forEach(element => {
+                    element.removeAttribute('disabled')
+                })
+            }
+            else {
+                document.querySelectorAll(`[triggered-by-radio=${fieldset.id}] > :first-child`).forEach(element => {
+                    element.setAttribute('disabled', '')
+                })
+            }
+            console.log('TriggerRadio')
+            UpdateStates();
+        }
+        // })
+        // } catch (error) {
+
+        // }
     }
     const CommonInputsProperty = () => {
         window.addEventListener('keydown', function (e) {
@@ -480,9 +511,10 @@ HTMLElement.prototype.formValidation = function ({
         }, true)
     }
     function IsSuccessFormPage(parameterType) {
-        console.log('blabla')
         let access = true;
-        Array.from(formElm.querySelectorAll('.form-page.active input')).forEach(parameter => {
+        console.log('IsSuccessFormPage')
+        Array.from(formElm.querySelectorAll('.form-page.active :is(input,textarea,select,fieldset)')).forEach(parameter => {
+            console.log(parameter)
             parameter.hasAttribute('unsuccess') && (access = false);
         })
         Object.values(formStateSuccess[formElm.id][activeFormPageIndex]).forEach(parameter => {
@@ -496,10 +528,23 @@ HTMLElement.prototype.formValidation = function ({
             }
             return access;
         };
-        if(formCookies){
-            console.log(formStateValues[formElm.id])
+        if (formCookies) {
+            // console.log(formStateValues[formElm.id])
             localStorage.setItem(`formStorage-${formElm.id}`, JSON.stringify(formStateValues[formElm.id]))
         }
+    }
+    const UpdateStates = () => {
+        //Set Form State
+        formPages.forEach((form, index) => {
+            console.log('UpdateStates')
+            let list = {}, list2 = {};
+            form.querySelectorAll('[befill]:not([disabled])').forEach(input => {
+                input.tagName === 'INPUT' && (list[input.id] = input.value);
+                list2[input.id] = input.hasAttribute('success') ? true : false;
+            })
+            formStateValues[formElm.id][index] = list;
+            formStateSuccess[formElm.id][index] = list2;
+        })
     }
     BeforeLoadForm();
     SwitchBetweenPages();
@@ -512,6 +557,7 @@ HTMLElement.prototype.formValidation = function ({
     CheckboxFieldset();
     RadioFieldset();
     YearInput();
+    // TriggerRadio();
     CommonInputsProperty();
 
 }
