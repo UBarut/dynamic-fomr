@@ -59,7 +59,7 @@
                     <h5 class="input-error"></h5>
                 </div>
             </div>
-            <div class="form-page">
+            <div class="form-page active">
                 <h3>Page-2</h3>
                 <div class="input-part">
                     <fieldset class="checkboxFieldset" id="checkboxFieldset-1" minLimit="2" maxLimit="3" befill>
@@ -149,8 +149,24 @@
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
+                <div class="input-group" interrelated="">
+                    <div class="input-part">
+                        <div class="inner-input" data-placeholder="Start Date">
+                            <input type="date" class="input-date" name="start-date-1" id="start-date-1">
+                            <div class="input-icon"></div>
+                        </div>
+                        <h5 class="input-error"></h5>
+                    </div>
+                    <div class="input-part">
+                        <div class="inner-input" data-placeholder="Finish Date">
+                            <input type="date" class="input-date" name="finish-date-1" id="finish-date-1" max="2023-03-12">
+                            <div class="input-icon"></div>
+                        </div>
+                        <h5 class="input-error"></h5>
+                    </div>
+                </div>
             </div>
-            <div class="form-page active">
+            <div class="form-page">
                 <h3>Page-3</h3>
                 <div class="input-part">
                     <fieldset class="radioFieldset" id="radioFieldset-2" trigger-radio befill>
@@ -214,7 +230,7 @@
     document.querySelectorAll('form').formValidation({
         controlType : 'INPUTS',
         placeholderType : 'classic',
-        formCookies : true
+        formCookies : false
     });
 </script>
 

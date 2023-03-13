@@ -8,44 +8,46 @@ function isNullOrEmpty(string) {
         return false;
     }
 }
-// HTMLElement.prototype.isNullOrEmpty = function (string){
-//     if (string.trim() === null || string.trim() === '') {
-//         return true;
-//     }
-//     else {
-//         return false;
-//     }
+// parameterObj = {
+//     controlType
 // }
 let formStateValues = {}, formStateSuccess = {};
-NodeList.prototype.formValidation = function ({ formIndex, controlType, placeholderType, formCookies }) {
+// let formElm;
+NodeList.prototype.formValidation = function ({ formIndex, controlType, placeholderType }) {
     this.forEach((el, index) => {
-        el.formValidation({ formIndex: index, controlType, placeholderType, formCookies })
+        el.formValidation({ formIndex: index, controlType, placeholderType })
+        // console.log(index, controlType, placeholderType)
     })
 }
 HTMLElement.prototype.formValidation = function ({
     formIndex,
     controlType = 'BUTTONS',
-    placeholderType = 'title',
-    formCookies = false
+    placeholderType = 'title'
 
 }) {
+    // console.log(formIndex, controlType, placeholderType)
     //Elements
     let formElm = this;
+    // let formElm = this;
     let formPages = this.querySelectorAll('.form-page');
     let buttons = this.querySelectorAll('.buttons .btn-form');
     //Variables
     let formsPagesLength = formPages.length - 1;
-    formStateValues[formElm.id] = {};
-    formStateSuccess[formElm.id] = { activeFormPageIndex: 0 };
+    // let activeFormPageIndex = 0;
+    // formIndex = index;
+    formStateValues[formElm.id] = { activeFormPageIndex: 0, buttons: this.querySelectorAll('.buttons .btn-form') };
+    // console.log(formStateValues[formElm.id].buttons)
     let activeFormPageIndex = formStateValues[formElm.id].activeFormPageIndex;
+    formStateSuccess[formElm.id] = {};
+    // const controlType = 'BUTTONS';
 
     const BeforeLoadForm = () => {
         //SetState
         formPages.forEach((form, index) => {
             //Set Form State
             let list = {}, list2 = {};
-            form.querySelectorAll('[befill]:not([disabled])').forEach(input => {
-                input.tagName === 'INPUT' && (list[input.id] = input.value);
+            form.querySelectorAll('[befill]').forEach(input => {
+                list[input.id] = input.value;
                 list2[input.id] = input.hasAttribute('success') ? true : false;
             })
             formStateValues[formElm.id][index] = list;
@@ -55,12 +57,20 @@ HTMLElement.prototype.formValidation = function ({
                 //Placeholder Move Up
                 if (e.target.closest('.inner-input[type-placeholder="anim"] input')) {
                     let target = e.target.closest('.input-part');
+                    // console.log(target.querySelector('input').value);
                     isNullOrEmpty(target.querySelector('input').value)
                         ? target.querySelector('.inner-input').classList.add('anim')
                         : target.querySelector('.inner-input').classList.remove('anim');
                 }
             }, true)
         })
+        //Set Input Type
+        formElm.querySelectorAll('input:is([type=text],[type=email],[type=number]),textarea').forEach(input => {
+            input.closest('.inner-input').setAttribute('type-placeholder', placeholderType)
+            placeholderType === 'anim' && input.closest('.inner-input').classList.add('anim')
+            // placeholderType === 'placeholder' && input.closest('.inner-input').classList.add('placeholder')
+        })
+
         //Placeholder Design Method
         window.addEventListener('input', function (e) {
             if (e.target.closest('.inner-input[type-placeholder="classic"] :is(input,textarea)')) {
@@ -70,38 +80,23 @@ HTMLElement.prototype.formValidation = function ({
                     : target.querySelector('.inner-input').classList.add('hidden-ph');
             }
         })
-        //Set LocaleStroge
-        if (formCookies) {
-            let cookie = JSON.parse(localStorage.getItem(`formStorage-${formElm.id}`));
-            if (cookie) {
-                formStateValues[formElm.id] = cookie;
-                for (let i = 0; i < Object.keys(cookie).length; i++) {
-                    for (const [key, value] of Object.entries(cookie[i])) {
-                        document.getElementById(key).value = value;
-                    }
-                }
-            }
-        }
-        //Set Input Type
-        formElm.querySelectorAll('input:is([type=text],[type=email],[type=number]),textarea').forEach(input => {
-            input.closest('.inner-input').setAttribute('type-placeholder', placeholderType);
-            (placeholderType === 'anim' && input.value.length === 0) && input.closest('.inner-input').classList.add('anim');
-
-            (placeholderType === 'classic' && input.value.length != 0) && input.closest('.inner-input').classList.add('hidden-ph');
-        })
         //Set Button 
         activeFormPageIndex = Array.from(document.querySelectorAll('.form-page')).indexOf(document.querySelector('.form-page.active'))
         activeFormPageIndex === 0 ? buttons[0].classList.add('d-none')
             : buttons[0].classList.remove('d-none');
+        // console.log(buttons[1])
         buttons[1].innerText = (formsPagesLength === activeFormPageIndex
             ? buttons[1].getAttribute('submit-title')
             : buttons[1].getAttribute('forward-title'));
         IsSuccessFormPage();
+        // console.log(formStateValues);
+
         //Set Focused Form
         let listEvent = ['blur', 'change'];
         listEvent.forEach(event => {
             window.addEventListener(event, function (e) {
                 try {
+                    // console.log(e.target.closest('form'))
                     formElm = e.target.closest('form');
                 } catch (error) {
 
@@ -112,10 +107,11 @@ HTMLElement.prototype.formValidation = function ({
     function SwitchBetweenPages() {
         buttons.forEach(button => {
             button.addEventListener('click', function (e) {
+                console.log(activeFormPageIndex, formStateValues[formElm.id], formElm.id)
                 if (button.closest('.btn-form:last-child:not([disabled])')) {
                     if (IsSuccessFormPage('BUTTONS')) {
                         formsPagesLength === activeFormPageIndex
-                            ? formElm.submit() & localStorage.removeItem(`formStorage-${formElm.id}`)
+                            ? formElm.submit()
                             : formPages[activeFormPageIndex].classList.remove('active') & formPages[activeFormPageIndex + 1].classList.add('active');
                         activeFormPageIndex += 1;
                     }
@@ -136,6 +132,7 @@ HTMLElement.prototype.formValidation = function ({
         })
     }
     function SetStateOfInput(target, state, errorCode = 102) {
+        // console.log(target, state, errorCode)
         let messages = {
             101: 'Doldurulmasi gerekli alan.',
             102: 'Hatalı yazım, lüttfen kontrol ediniz.',
@@ -160,11 +157,11 @@ HTMLElement.prototype.formValidation = function ({
         let inputError = target.closest('.input-part').querySelector('.input-error');
         switch (state) {
             case 'STATE_SUCCESS':
+                // console.log(state, target);
                 inputError && (inputError.innerText = '');
                 target.setAttribute('success', '');
                 target.removeAttribute('unsuccess');
                 target.id in formStateSuccess[formElm.id][activeFormPageIndex] && (formStateSuccess[formElm.id][activeFormPageIndex][target.id] = true);
-                target.id in formStateValues[formElm.id][activeFormPageIndex] && (formStateValues[formElm.id][activeFormPageIndex][target.id] = target.value);
                 break;
             case 'STATE_UNSUCCESS':
                 inputError && (inputError.innerText = messages[errorCode]);
@@ -234,8 +231,8 @@ HTMLElement.prototype.formValidation = function ({
                                 SetStateOfInput(e.target, 'STATE_SUCCESS')
                             }
                         }
-                        IsSuccessFormPage('INPUTS');
                     }
+                    IsSuccessFormPage('INPUTS');
                 } catch (error) {
 
                 }
@@ -368,10 +365,7 @@ HTMLElement.prototype.formValidation = function ({
     const DateInput = () => {
         window.addEventListener('change', function (e) {//change ypaılabilir.
             if (e.target.matches('input.input-date')) {
-                let target = e.target.matches('input.input-date')
-                if (target.hasAttribute('max')) {
-                    target.max = new Date().toISOString().split("T")[0];
-                }
+                // console.log(e.target.value);
                 if (e.target.value === '') {
                     SetStateOfInput(e.target, 'STATE_EMPTY', 99);
                 }
@@ -381,7 +375,6 @@ HTMLElement.prototype.formValidation = function ({
                 IsSuccessFormPage('INPUTS');
             }
         }, true)
-
     }
     function YearInput() {
         const regExYear = /^(19[6-9]\d|200\d|201\d|202[0-3])$/;
@@ -391,6 +384,7 @@ HTMLElement.prototype.formValidation = function ({
             window.addEventListener(event, function (e) {
                 try {
                     if (e.target.matches('input[type=number].year')) {
+                        // console.log('ufuk');
                         if (e.target.value.length === 0) {
                             SetStateOfInput(e.target, 'STATE_EMPTY', 99);
                         }
@@ -400,8 +394,8 @@ HTMLElement.prototype.formValidation = function ({
                         else {
                             SetStateOfInput(e.target, 'STATE_SUCCESS');
                         }
-                        IsSuccessFormPage('INPUTS');
                     }
+                    IsSuccessFormPage('INPUTS');
                 } catch (error) {
 
                 }
@@ -434,7 +428,6 @@ HTMLElement.prototype.formValidation = function ({
                     & innerDiv.querySelector('[file-title]').setAttribute('file-name', 'dosya ismi')
                     : SetStateOfInput(target, 'STATE_EMPTY')
                     & innerDiv.querySelector('[file-title]').setAttribute('file-name', '');
-                IsSuccessFormPage('INPUTS');
             }
         })
     }
@@ -447,58 +440,27 @@ HTMLElement.prototype.formValidation = function ({
                 fieldset.querySelectorAll('input[type=checkbox]').forEach(cb => {
                     cb.checked && (checkCb = true) & (countCb += 1);
                 })
+                // console.log(fieldset.getAttribute('minLimit'));
                 checkCb
                     ? ((countCb >= fieldset.getAttribute('minLimit') && countCb <= fieldset.getAttribute('maxLimit')) ? SetStateOfInput(fieldset, 'STATE_SUCCESS') : SetStateOfInput(fieldset, 'STATE_EMPTY', 99))
                     : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
-                IsSuccessFormPage('INPUTS');
             }
         }, true)
     }
     function RadioFieldset() {
         window.addEventListener('change', function (e) {
-            try {
-                if (e.target.getAttribute('type') === 'radio') {
-                    TriggerRadio(e);
-                    let fieldset = e.target.closest('fieldset');
-                    let checkR = false;
-                    fieldset.querySelectorAll('input[type=radio]').forEach(rb => {
-                        rb.checked && (checkR = true);
-                    })
-                    checkR
-                        ? SetStateOfInput(fieldset, 'STATE_SUCCESS')
-                        : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
-                    console.log('RadioFieldset')
-                    IsSuccessFormPage('INPUTS');
-                }
-            } catch (error) {
-
+            if (e.target.getAttribute('type') === 'radio') {
+                let fieldset = e.target.closest('fieldset');
+                let checkR = false;
+                fieldset.querySelectorAll('input[type=radio]').forEach(rb => {
+                    rb.checked && (checkR = true);
+                })
+                // console.log(checkR);
+                checkR
+                    ? SetStateOfInput(fieldset, 'STATE_SUCCESS')
+                    : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
             }
-
         }, true)
-    }
-    const TriggerRadio = (e) => {
-        // try {
-        // window.addEventListener('change', function (e) {
-        if (e.target.closest('[trigger-radio] input[type=radio]')) {
-            let fieldset = e.target.closest('[trigger-radio]')
-            let target = e.target.closest('[trigger-radio] input[type=radio]')
-            if (target.hasAttribute('radio-accept')) {
-                document.querySelectorAll(`[triggered-by-radio=${fieldset.id}] > :first-child`).forEach(element => {
-                    element.removeAttribute('disabled')
-                })
-            }
-            else {
-                document.querySelectorAll(`[triggered-by-radio=${fieldset.id}] > :first-child`).forEach(element => {
-                    element.setAttribute('disabled', '')
-                })
-            }
-            console.log('TriggerRadio')
-            UpdateStates();
-        }
-        // })
-        // } catch (error) {
-
-        // }
     }
     const CommonInputsProperty = () => {
         window.addEventListener('keydown', function (e) {
@@ -517,6 +479,7 @@ HTMLElement.prototype.formValidation = function ({
             }
         }, true)
         window.addEventListener('focus', function (e) {
+            // console.log(e.target.matches('input,textarea'))
             try {
                 if (e.target.matches('input,textarea')) {
                     SetStateOfInput(e.target, 'STATE_EMPTY', 99);
@@ -525,22 +488,11 @@ HTMLElement.prototype.formValidation = function ({
             }
         }, true)
     }
-    const InterrelatedDate = () => {//&& !isNullOrEmpty(interrelated.getAttribute('interrelated'))
-        document.querySelectorAll('[interrelated]').forEach(interrelated => {
-            console.log(interrelated.getAttribute('interrelated'),!isNullOrEmpty(interrelated.getAttribute('interrelated')));
-            (interrelated.getAttribute('interrelated') < 1 ) && interrelated.setAttribute('interrelated', '0'); 
-            console.log(interrelated.getAttribute('interrelated'));
-            let secondDate = new Date(interrelated.querySelectorAll('input')[1].max);
-            let firstDate = new Date(secondDate.setMonth(secondDate.getMonth() - interrelated.getAttribute('interrelated')));
-            interrelated.querySelectorAll('input')[0].max = `${firstDate.toISOString().split('T')[0]}`;
-            console.log(interrelated)
-        })
-    }
     function IsSuccessFormPage(parameterType) {
         let access = true;
-        // console.log('IsSuccessFormPage')
-        Array.from(formElm.querySelectorAll('.form-page.active :is(input,textarea,select,fieldset)')).forEach(parameter => {
-            // console.log(parameter)
+        // console.log(controlType, parameterType);
+        // if (controlType === parameterType) {
+        Array.from(formElm.querySelectorAll('.form-page.active input')).forEach(parameter => {
             parameter.hasAttribute('unsuccess') && (access = false);
         })
         Object.values(formStateSuccess[formElm.id][activeFormPageIndex]).forEach(parameter => {
@@ -554,25 +506,9 @@ HTMLElement.prototype.formValidation = function ({
             }
             return access;
         };
-        if (formCookies) {
-            // console.log(formStateValues[formElm.id])
-            localStorage.setItem(`formStorage-${formElm.id}`, JSON.stringify(formStateValues[formElm.id]))
-        }
+        // console.log(formElm);
+        // }
     }
-    const UpdateStates = () => {
-        //Set Form State
-        formPages.forEach((form, index) => {
-            console.log('UpdateStates')
-            let list = {}, list2 = {};
-            form.querySelectorAll('[befill]:not([disabled])').forEach(input => {
-                input.tagName === 'INPUT' && (list[input.id] = input.value);
-                list2[input.id] = input.hasAttribute('success') ? true : false;
-            })
-            formStateValues[formElm.id][index] = list;
-            formStateSuccess[formElm.id][index] = list2;
-        })
-    }
-
     BeforeLoadForm();
     SwitchBetweenPages();
     //Input Types
@@ -584,8 +520,6 @@ HTMLElement.prototype.formValidation = function ({
     CheckboxFieldset();
     RadioFieldset();
     YearInput();
-    InterrelatedDate();
-    // TriggerRadio();
     CommonInputsProperty();
 
 }

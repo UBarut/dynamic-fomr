@@ -8,6 +8,16 @@ form {
             display: flex;
         }
 
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+
+            @media screen and (max-width: 520px) {
+                    flex-direction: column;
+            }
+        }
+
         .input-part {
             position: relative;
             width: 100%;
@@ -60,20 +70,24 @@ form {
 
                 }
             }
+
             .input-error {
                 font-size: 14px;
                 color: #9d0000;
+
                 &:empty {
                     display: none;
                 }
             }
         }
     }
-    .button[disabled]{
+
+    .button[disabled] {
         pointer-events: none;
         background-color: #969696;
     }
-    .d-none{
+
+    .d-none {
         display: none;
     }
 }

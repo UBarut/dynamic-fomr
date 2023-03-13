@@ -1,3 +1,4 @@
+
 function isNullOrEmpty(string) {
   if (string.trim() === null || string.trim() === '') {
     return true;
@@ -6,40 +7,37 @@ function isNullOrEmpty(string) {
     return false;
   }
 }
-//Elements
-let formElm = document.querySelector('form');
-let formPages = document.querySelectorAll('.form-page');
-let buttons = document.querySelectorAll('.buttons .btn-form');
-//Variables
+
 let formStateValues = {}, formStateSuccess = {};
-let formsPagesLength = formPages.length - 1;
+let formElm = document.querySelector('form');
+let forms = document.querySelectorAll('.form-page');
+let buttons = document.querySelectorAll('.buttons .btn-form');
+let formsPagesLength = forms.length - 1;
 let activeFormPageIndex = 0;
 const controlType = 'INPUTS';
 
-formPages.forEach((form, index) => {
+forms.forEach((form, index) => {
   //Set Form State
   let list = {}, list2 = {};
-  form.querySelectorAll('[befill]').forEach(input => {
-    list[input.id] = input.value;
-    list2[input.id] = input.hasAttribute('success') ? true : false;
+  form.querySelectorAll('input[befill]').forEach(input => {
+    list[input.name] = input.value;
+    list2[input.name] = input.hasAttribute('success') ? true : false;
   })
   formStateValues[index] = list;
   formStateSuccess[index] = list2;
   //Input Listeners
-  form.addEventListener('blur', function (e) {//change
+  form.addEventListener('change', function (e) {
     //Placeholder Move Up
     if (e.target.closest('.inner-input[type-pa] input')) {
       let target = e.target.closest('.input-part');
-      console.log(target.querySelector('input').value);
       isNullOrEmpty(target.querySelector('input').value)
         ? target.querySelector('.inner-input').classList.add('anim')
         : target.querySelector('.inner-input').classList.remove('anim');
     }
-  },true)
+  })
 })
-console.log(formStateSuccess);
 window.addEventListener('input', function (e) {
-  // console.log(e.target.closest('.inner-input[type-ph] :is(input,textarea)'))
+  console.log(e.target.closest('.inner-input[type-ph] :is(input,textarea)'))
   if (e.target.closest('.inner-input[type-ph] :is(input,textarea)')) {
     let target = e.target.closest('.input-part');
     isNullOrEmpty(e.target.closest('.inner-input[type-ph] :is(input,textarea)').value)
@@ -58,6 +56,8 @@ const BeforeLoadForm = () => {
     : buttons[1].getAttribute('forward-title'));
   IsSuccessFormPage();
 };
+BeforeLoadForm();
+
 function SwitchBetweenPages() {
   buttons.forEach(button => {
     button.addEventListener('click', function (e) {
@@ -65,13 +65,13 @@ function SwitchBetweenPages() {
         if (IsSuccessFormPage('BUTTONS')) {
           formsPagesLength === activeFormPageIndex
             ? formElm.submit()
-            : formPages[activeFormPageIndex].classList.remove('active') & formPages[activeFormPageIndex + 1].classList.add('active') & console.log('else');
+            : forms[activeFormPageIndex].classList.remove('active') & forms[activeFormPageIndex + 1].classList.add('active') & console.log('else');
           activeFormPageIndex += 1;
         }
       }
       else if (button.closest('.btn-form:first-child')) {
-        formPages[activeFormPageIndex].classList.remove('active');
-        formPages[activeFormPageIndex - 1].classList.add('active');
+        forms[activeFormPageIndex].classList.remove('active');
+        forms[activeFormPageIndex - 1].classList.add('active');
         activeFormPageIndex -= 1;
       }
       else {
@@ -86,6 +86,7 @@ function SwitchBetweenPages() {
     })
   })
 }
+SwitchBetweenPages();
 function ErrorMessage(target, bool, errorCode = 102) {
   // let cloneH5 = document.createElement('h5')
   // cloneH5.classList.add('file-error', 'fSize-14');
@@ -142,14 +143,13 @@ function ErrorMessage(target, bool, errorCode = 102) {
   }
 }
 function SetStateOfInput(target, state, errorCode = 102) {
-  console.log(target, state, errorCode)
   let messages = {
     101: 'Doldurulmasi gerekli alan.',
     102: 'Hatalı yazım, lüttfen kontrol ediniz.',
     201: 'Telefon numarası hatalıdır.',
     202: 'Eksik numara girilmiştir.',
     203: 'Numaraya bağlı bir hesap bulunmamaktadır.',
-    211: 'Yanlış doğrulama kodu.',
+    211: 'Ynalış doğrulama kodu.',
     301: 'Geçerli bir link giriniz.',
     401: 'Geçerli bir e-mail adresi giriniz.',
     501: 'Lütfen en az bir isim ve soyisim giriniz!',
@@ -168,21 +168,21 @@ function SetStateOfInput(target, state, errorCode = 102) {
   switch (state) {
     case 'STATE_SUCCESS':
       // console.log(state, target);
-      inputError && (inputError.innerText = '');
+      inputError.innerText = '';
       target.setAttribute('success', '');
       target.removeAttribute('unsuccess');
-      target.id in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.id] = true);
+      target.name in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.name] = true);
       break;
     case 'STATE_UNSUCCESS':
-      inputError && (inputError.innerText = messages[errorCode]);
+      inputError.innerText = messages[errorCode];
       target.setAttribute('unsuccess', '');
       target.removeAttribute('success');
-      target.id in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.id] = false);
+      target.name in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.name] = false);
       break;
     case 'STATE_EMPTY':
-      inputError && (inputError.innerText = '');
+      inputError.innerText = '';
       ['success', 'unsuccess'].forEach(attribute => target.removeAttribute(attribute));
-      target.id in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.id] = false)
+      target.name in formStateSuccess[activeFormPageIndex] && (formStateSuccess[activeFormPageIndex][target.name] = false)
       break;
     default:
       break;
@@ -194,7 +194,7 @@ function TextInput() {
   const eventsList = ['blur', 'change']
   for (const event of eventsList) {
     document.querySelector('form')?.addEventListener(event, function (e) {
-      if (e.target.matches('input[type=text],textarea')) {
+      if (e.target.matches('input[type=text]')) {
         if (e.target.value.length === 0) {
           SetStateOfInput(e.target, 'STATE_EMPTY')
         }
@@ -359,7 +359,7 @@ function TextInput2() {
 function TelInput() {
   const phoneCodes = [530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 501, 505, 506, 507, 551, 552, 553, 554, 555, 559, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 322, 416, 272, 472, 382, 358, 312, 242, 478, 466, 256, 266, 378, 488, 458, 228, 426, 434, 374, 248, 224, 286, 376, 364, 258, 412, 380, 284, 424, 446, 442, 222, 342, 454, 456, 438, 326, 476, 246, 324, 212, 216, 392, 372, 354, 226, 432, 276, 428, 462, 356, 282, 486, 414, 346, 368, 484, 362, 264, 464, 328, 452, 388, 384, 436, 252, 482, 236, 422, 274, 332, 262, 344, 348, 386, 288, 318, 352, 366, 474, 338, 370, 232];
   let firstThree = '';
-  $("input[type=tel].tel-input").inputmask({ "mask": $("input[type=tel].tel-input").data('pattern'), showMaskOnHover: false });
+  $("input[type=tel].tel-input").inputmask({ "mask": $("input[type=tel].tel-input").data('pattern'),showMaskOnHover : false });
   window.addEventListener('keyup', function (e) {
     if (e.target.matches("input[type=tel].tel-input")) {
       firstThree = e.target.value.match(/(\d+)/g) || '';
@@ -541,12 +541,12 @@ function MailInput() {
   }, true);
 }
 const DateInput = () => {
-  // document.querySelector('form').addEventListener('focus', function (e) {
-  //   if (e.target.matches('input.input-date')) {
-  //     e.target.classList.remove('placeholder');
-  //     IsSuccessFormPage('INPUTS');
-  //   }
-  // }, true);
+  document.querySelector('form').addEventListener('focus', function (e) {
+    if (e.target.matches('input.input-date')) {
+      // e.target.classList.remove('placeholder');
+      IsSuccessFormPage('INPUTS');
+    }
+  }, true);
   document.querySelector('form').addEventListener('blur', function (e) {//change ypaılabilir.
     if (e.target.matches('input.input-date')) {
       console.log(e.target.value);
@@ -560,82 +560,9 @@ const DateInput = () => {
     }
   }, true)
 }
-const FileInput = () => {
-  window.addEventListener('click', function (e) {
-    if (e.target.closest('.file-input .btn-file')) {
-      const target = e.target.closest('.inner-input');
-      target.querySelector('input[type=file]').click();
-    }
-  })
-  window.addEventListener('change', function (e) {
-    if (e.target.closest('input[type=file]')) {
-      const target = e.target.closest('input[type=file]');
-      const innerDiv = e.target.closest('.inner-input');
-      target.files.length != 0
-        ? SetStateOfInput(target, 'STATE_SUCCESS')
-        & innerDiv.querySelector('[file-title]').setAttribute('file-name', 'dosya ismi')
-        : SetStateOfInput(target, 'STATE_EMPTY')
-        & innerDiv.querySelector('[file-title]').setAttribute('file-name', '');
-    }
-  })
-}
-function CheckboxFieldset() {
-  window.addEventListener('change', function(e){
-    if(e.target.getAttribute('type') === 'checkbox'){
-      let fieldset = e.target.closest('fieldset');
-      let checkCb = false;
-      let countCb = 0;
-      fieldset.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        cb.checked && (checkCb = true) & (countCb+=1);
-      })
-      console.log(fieldset.getAttribute('minLimit'));
-      checkCb
-        ? ((countCb>=fieldset.getAttribute('minLimit') && countCb<=fieldset.getAttribute('maxLimit')) ? SetStateOfInput(fieldset, 'STATE_SUCCESS') & console.log(fieldset) : SetStateOfInput(fieldset, 'STATE_EMPTY', 99))
-        : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
-    }
-  },true)
-}
-function RadioFieldset() {
-  window.addEventListener('change', function(e){
-    if(e.target.getAttribute('type') === 'radio'){
-      let fieldset = e.target.closest('fieldset');
-      let checkR = false;
-      fieldset.querySelectorAll('input[type=radio]').forEach(rb => {
-        rb.checked && (checkR = true);
-      })
-      console.log(checkR);
-      checkR
-        ? SetStateOfInput(fieldset, 'STATE_SUCCESS')
-        : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
-    }
-  },true)
-}
-const CommonInputsProperty = () => {
-  window.addEventListener('keydown', function (e) {
-    if (e.target.closest('input,textarea')) {
-      let target = e.target.closest('input,textarea');
-        (target.maxLength > 0 && target.maxLength < target.value.length) && e.preventDefault();
-    }
-  })
-  document.querySelector('form').addEventListener('blur', function (e) {
-    if (e.target.closest('input,textarea')) {
-      let target = e.target.closest('input,textarea');
-      if (target.minLength) {
-        (target.minLength > target.value.length && target.value.length != 0)//target.minLength > 0 && 
-          && SetStateOfInput(target, 'STATE_UNSUCCESS', 502);
-      }
-    }
-  }, true)
-  window.addEventListener('focus', function (e) {
-    console.log(e.target.matches('input,textarea'))
-    if (e.target.matches('input,textarea')) {
-        SetStateOfInput(e.target, 'STATE_EMPTY', 99);
-    }
-  }, true)
-}
 function IsSuccessFormPage(parameterType) {
   let access = true;
-  // console.log(controlType, parameterType);
+  console.log(controlType, parameterType);
   // if (controlType === parameterType) {
   Array.from(document.querySelectorAll('.form-page.active input')).forEach(parameter => {
     parameter.hasAttribute('unsuccess') && (access = false);
@@ -646,22 +573,13 @@ function IsSuccessFormPage(parameterType) {
   controlType === 'INPUTS' && (access ? buttons[1].removeAttribute('disabled') : buttons[1].setAttribute('disabled', ''));
   if (parameterType === 'BUTTONS') {
     for (const [key, value] of Object.entries(formStateSuccess[activeFormPageIndex])) {
-      let target = document.querySelector(`.form-page.active [id=${key}]`);
+      let target = document.querySelector(`.form-page.active [name=${key}]`);
       !value && SetStateOfInput(target, 'STATE_UNSUCCESS', 101);
     }
     return access;
   };
 }
-
-
-BeforeLoadForm();
-SwitchBetweenPages();
-//Input Types
 TextInput();
 TelInput();
 MailInput();
 DateInput();
-FileInput();
-CheckboxFieldset();
-RadioFieldset();
-CommonInputsProperty();
