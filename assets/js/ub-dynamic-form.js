@@ -527,13 +527,35 @@ HTMLElement.prototype.formValidation = function ({
     }
     const InterrelatedDate = () => {//&& !isNullOrEmpty(interrelated.getAttribute('interrelated'))
         document.querySelectorAll('[interrelated]').forEach(interrelated => {
-            console.log(interrelated.getAttribute('interrelated'),!isNullOrEmpty(interrelated.getAttribute('interrelated')));
-            (interrelated.getAttribute('interrelated') < 1 ) && interrelated.setAttribute('interrelated', '0'); 
+            console.log(interrelated.getAttribute('interrelated'), !isNullOrEmpty(interrelated.getAttribute('interrelated')));
+            (interrelated.getAttribute('interrelated') < 1) && interrelated.setAttribute('interrelated', '0');
             console.log(interrelated.getAttribute('interrelated'));
             let secondDate = new Date(interrelated.querySelectorAll('input')[1].max);
             let firstDate = new Date(secondDate.setMonth(secondDate.getMonth() - interrelated.getAttribute('interrelated')));
             interrelated.querySelectorAll('input')[0].max = `${firstDate.toISOString().split('T')[0]}`;
             console.log(interrelated)
+        })
+    }
+    const AddGroupInputs = () => {
+        let cloneList = {};
+        document.querySelectorAll('.dynamic-inputs-section').forEach((clone, index) => {
+            let cloneNode = clone.querySelector('.inner-dynamic-group').cloneNode(true);
+            cloneNode.querySelectorAll('input,select,textarea').forEach(element => {
+                console.log(element, element.value)
+                element.setAttribute('value','');
+                console.log(element)
+                element.closest('.inner-input')?.classList.remove('hidden-ph')
+                element.closest('.inner-input')?.getAttribute('type-placeholder')==="anim" && element.closest('.inner-input').classList.add('anim')
+            })
+            cloneList[index] = cloneNode;
+        })
+        console.log(cloneList)
+        window.addEventListener('click', function (e) {
+            if (e.target.closest('.add-group-inputs')) {
+                let target = e.target.closest('.add-group-inputs');
+                let dynamicIndex = Array.from(document.querySelectorAll('.dynamic-inputs-section')).indexOf(target.closest('.dynamic-inputs-section'))
+                target.closest('.dynamic-inputs-section').insertBefore(cloneList[dynamicIndex].cloneNode(true), target.closest('.dynamic-inputs-section').children[target.closest('.dynamic-inputs-section').children.length - 1]);
+            }
         })
     }
     function IsSuccessFormPage(parameterType) {
@@ -572,6 +594,29 @@ HTMLElement.prototype.formValidation = function ({
             formStateSuccess[formElm.id][index] = list2;
         })
     }
+    const MutationObserveAttributes = () => {
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(function (node) {
+                    console.log(node);
+                    node.querySelectorAll('*').forEach(element => {
+                        Array.from(element.attributes).forEach(attr => {
+                            if (attr.name.startsWith('data-mutobs-')) {
+                                console.log(attr.name.slice(12));
+                            }
+                        })
+                    })
+                })
+            })
+        });
+        document.querySelectorAll('form').forEach(form => {
+            observer.observe(form, {
+                attributes: true,
+                childList: true,
+                subtree: true
+            });
+        })
+    }
 
     BeforeLoadForm();
     SwitchBetweenPages();
@@ -585,7 +630,8 @@ HTMLElement.prototype.formValidation = function ({
     RadioFieldset();
     YearInput();
     InterrelatedDate();
+    AddGroupInputs();
+    // MutationObserveAttributes();
     // TriggerRadio();
     CommonInputsProperty();
-
 }

@@ -5,13 +5,13 @@ form .form-page {
 form .form-page.active {
   display: flex;
 }
-form .form-page .input-group {
+form .form-page .input-group.x2 {
   display: flex;
   justify-content: space-between;
   gap: 8px;
 }
 @media screen and (max-width: 520px) {
-  form .form-page .input-group {
+  form .form-page .input-group.x2 {
     flex-direction: column;
   }
 }

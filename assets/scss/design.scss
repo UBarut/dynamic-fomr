@@ -119,6 +119,12 @@ form {
             color: white;
             padding: 0 0 20px;
         }
+
+        h5 {
+            font-size: 18px;
+            color: white;
+            padding: 0 0 20px;
+        }
     }
 }
 
@@ -189,14 +195,15 @@ input:is([type=text],
     [type=tel],
     [type=number],
     [type=date]),
-    textarea {
-        &:disabled{
-            background-color: #969696;
-            &::placeholder{
-                color: #282828;
-            }
+textarea {
+    &:disabled {
+        background-color: #969696;
+
+        &::placeholder {
+            color: #282828;
         }
     }
+}
 
 textarea:focus,
 input:focus {
@@ -450,4 +457,21 @@ fieldset .groups :is(.checkbox, .radio) label::before {
     background-position: center;
     background-size: 16px 16px;
     transition: all .45s ease-in-out;
+}
+
+.dynamic-inputs-section {
+    margin: 0 0 24px 0;
+
+    >div {
+        padding: 12px 12px;
+        margin: 12px 0;
+        border: 1px solid white;
+        border-radius: 8px;
+    }
+}
+
+.underline {
+    color: white;
+    font-size: 16px;
+    text-decoration: underline;
 }

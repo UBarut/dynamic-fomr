@@ -27,8 +27,8 @@
                 </div>
                 <div class="input-part">
                     <div class="inner-input" data-placeholder="Phone Number">
-                        <input type="tel" class="tel-input" name="phone-1" id="phone-1"
-                            data-pattern="(999) 999 99 99" befill>
+                        <input type="tel" class="tel-input" name="phone-1" id="phone-1" data-pattern="(999) 999 99 99"
+                            befill>
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
@@ -47,8 +47,7 @@
                 </div>
                 <div class="input-part">
                     <div class="inner-input" data-placeholder="First Work Year">
-                        <input type="number" class="year" name="year-1" id="year-1" min="1960" max="2022" maxlength="4"
-                        >
+                        <input type="number" class="year" name="year-1" id="year-1" min="1960" max="2022" maxlength="4">
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
@@ -59,7 +58,7 @@
                     <h5 class="input-error"></h5>
                 </div>
             </div>
-            <div class="form-page active">
+            <div class="form-page">
                 <h3>Page-2</h3>
                 <div class="input-part">
                     <fieldset class="checkboxFieldset" id="checkboxFieldset-1" minLimit="2" maxLimit="3" befill>
@@ -149,7 +148,7 @@
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
-                <div class="input-group" interrelated="">
+                <div class="input-group x2" interrelated="12">
                     <div class="input-part">
                         <div class="inner-input" data-placeholder="Start Date">
                             <input type="date" class="input-date" name="start-date-1" id="start-date-1">
@@ -159,7 +158,8 @@
                     </div>
                     <div class="input-part">
                         <div class="inner-input" data-placeholder="Finish Date">
-                            <input type="date" class="input-date" name="finish-date-1" id="finish-date-1" max="2023-03-12">
+                            <input type="date" class="input-date" name="finish-date-1" id="finish-date-1"
+                                max="2023-03-12">
                             <div class="input-icon"></div>
                         </div>
                         <h5 class="input-error"></h5>
@@ -207,16 +207,107 @@
                     <h5 class="input-error"></h5>
                 </div>
                 <div class="input-part">
-                    <div class="inner-input file-input" data-placeholder="Textarea 2" triggered-by-radio="radioFieldset-2">
+                    <div class="inner-input file-input" data-placeholder="Textarea 2"
+                        triggered-by-radio="radioFieldset-2">
                         <textarea minlength="8" maxlength="100"></textarea>
                     </div>
                     <h5 class="input-error"></h5>
                 </div>
             </div>
+            <div class="form-page active">
+                <h3>Page-3</h3>
+                <div class="dynamic-inputs-section">
+                    <div class="inner-dynamic-group">
+                        <h5>Group-1</h5>
+                        <div class="input-part">
+                            <div class="inner-input" data-placeholder="Name-Surname-2">
+                                <input type="text" class="namesurname" name="namesurname-2" id="namesurname-2" value="ufuk barut" befill>
+                            </div>
+                            <h5 class="input-error"></h5>
+                        </div>
+                        <div class="input-part">
+                            <div class="inner-input" data-placeholder="Phone Number-2">
+                                <input type="tel" class="tel-input" name="phone-2" id="phone-2" befill
+                                    data-pattern="(999) 999 99 99" data-mutobs-input>
+                            </div>
+                            <h5 class="input-error"></h5>
+                        </div>
+                        <div class="input-part">
+                            <div class="inner-input" data-placeholder="Email-2">
+                                <input type="email" class="" name="email-2" id="email-2" placeholder="" befill>
+                            </div>
+                            <h5 class="input-error"></h5>
+                        </div>
+                        <div class="input-group x2" interrelated="12">
+                            <div class="input-part">
+                                <div class="inner-input" data-placeholder="Start Date">
+                                    <input type="date" class="input-date" name="start-date-1" id="start-date-1">
+                                    <div class="input-icon"></div>
+                                </div>
+                                <h5 class="input-error"></h5>
+                            </div>
+                            <div class="input-part">
+                                <div class="inner-input" data-placeholder="Finish Date">
+                                    <input type="date" class="input-date" name="finish-date-1" id="finish-date-1"
+                                        max="2023-03-12">
+                                    <div class="input-icon"></div>
+                                </div>
+                                <h5 class="input-error"></h5>
+                            </div>
+                        </div>
+                        <div class="input-part">
+                            <fieldset class="checkboxFieldset" id="checkboxFieldset-2" minLimit="2" maxLimit="3" befill>
+                                <div class="content">
+                                    <div class="title">CheckboxFieldset -2-</div>
+                                    <div class="desc">Checkbox description</div>
+                                </div>
+                                <div class="groups">
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-1">
+                                        <label for="checkbox2-1">checkbox-1</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-2">
+                                        <label for="checkbox2-2">checkbox-2</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-3">
+                                        <label for="checkbox2-3">checkbox-3</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-4">
+                                        <label for="checkbox2-4">checkbox-4</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-5">
+                                        <label for="checkbox2-5">checkbox-5</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-6">
+                                        <label for="checkbox2-6">checkbox-6</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <input type="checkbox" name="checkbox2" id="checkbox2-7">
+                                        <label for="checkbox2-7">checkbox-7</label>
+                                    </div>
+                                </div>
+                                <!-- <h5 class="input-error"></h5> -->
+                            </fieldset>
+                        </div>
+                        <div class="input-part">
+                            <div class="inner-input" data-placeholder="Textarea 2">
+                                <textarea minlength="8" maxlength="100" name="textarea-2" id="textarea-2"></textarea>
+                            </div>
+                            <h5 class="input-error"></h5>
+                        </div>
+                    </div>
+                    <a href="javacript:void(0);" class="add-group-inputs underline">Add New Group</a>
+                </div>
+
+            </div>
             <div class="buttons">
                 <a method="button" class="button btn-form d-none">Prev</a>
-                <a method="button" class="button btn-form" forward-title="Next1"
-                    submit-title="Submit"><span></span></a>
+                <a method="button" class="button btn-form" forward-title="Next1" submit-title="Submit"><span></span></a>
             </div>
         </form>
     </main>
@@ -228,9 +319,9 @@
 </body>
 <script>
     document.querySelectorAll('form').formValidation({
-        controlType : 'INPUTS',
-        placeholderType : 'classic',
-        formCookies : false
+        controlType: 'INPUTS',
+        placeholderType: 'classic',
+        formCookies: false
     });
 </script>
 
