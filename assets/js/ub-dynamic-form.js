@@ -467,7 +467,6 @@ HTMLElement.prototype.formValidation = function ({
                     checkR
                         ? SetStateOfInput(fieldset, 'STATE_SUCCESS')
                         : SetStateOfInput(fieldset, 'STATE_EMPTY', 99);
-                    console.log('RadioFieldset')
                     IsSuccessFormPage('INPUTS');
                 }
             } catch (error) {
@@ -492,7 +491,6 @@ HTMLElement.prototype.formValidation = function ({
                     element.setAttribute('disabled', '')
                 })
             }
-            console.log('TriggerRadio')
             UpdateStates();
         }
         // })
@@ -527,13 +525,10 @@ HTMLElement.prototype.formValidation = function ({
     }
     const InterrelatedDate = () => {//&& !isNullOrEmpty(interrelated.getAttribute('interrelated'))
         document.querySelectorAll('[interrelated]').forEach(interrelated => {
-            console.log(interrelated.getAttribute('interrelated'), !isNullOrEmpty(interrelated.getAttribute('interrelated')));
             (interrelated.getAttribute('interrelated') < 1) && interrelated.setAttribute('interrelated', '0');
-            console.log(interrelated.getAttribute('interrelated'));
             let secondDate = new Date(interrelated.querySelectorAll('input')[1].max);
             let firstDate = new Date(secondDate.setMonth(secondDate.getMonth() - interrelated.getAttribute('interrelated')));
             interrelated.querySelectorAll('input')[0].max = `${firstDate.toISOString().split('T')[0]}`;
-            console.log(interrelated)
         })
     }
     const AddGroupInputs = () => {
@@ -541,20 +536,31 @@ HTMLElement.prototype.formValidation = function ({
         document.querySelectorAll('.dynamic-inputs-section').forEach((clone, index) => {
             let cloneNode = clone.querySelector('.inner-dynamic-group').cloneNode(true);
             cloneNode.querySelectorAll('input,select,textarea').forEach(element => {
-                console.log(element, element.value)
-                element.setAttribute('value','');
-                console.log(element)
+                element.setAttribute('value', '');
                 element.closest('.inner-input')?.classList.remove('hidden-ph')
-                element.closest('.inner-input')?.getAttribute('type-placeholder')==="anim" && element.closest('.inner-input').classList.add('anim')
+                element.closest('.inner-input')?.getAttribute('type-placeholder') === "anim" && element.closest('.inner-input').classList.add('anim')
             })
             cloneList[index] = cloneNode;
         })
-        console.log(cloneList)
         window.addEventListener('click', function (e) {
+            let target;
             if (e.target.closest('.add-group-inputs')) {
-                let target = e.target.closest('.add-group-inputs');
+                target = e.target.closest('.add-group-inputs');
                 let dynamicIndex = Array.from(document.querySelectorAll('.dynamic-inputs-section')).indexOf(target.closest('.dynamic-inputs-section'))
                 target.closest('.dynamic-inputs-section').insertBefore(cloneList[dynamicIndex].cloneNode(true), target.closest('.dynamic-inputs-section').children[target.closest('.dynamic-inputs-section').children.length - 1]);
+                document.querySelectorAll('.inner-dynamic-group').forEach((section, index) => {
+                    console.log(section, index);
+                    section.querySelectorAll('[id]').forEach(element => {
+                        let split = element.id.split("-");
+                        let splicedStr = split.slice(0, split.length - 1).join("-");
+                        element.setAttribute('id', `${splicedStr}-dis${index + 1}`)
+                        element.setAttribute('name', `${splicedStr}-dis${index + 1}`)
+                    })
+                })
+            }
+            else if(e.target.closest('.remove-group-inputs')){
+                target = e.target.closest('.remove-group-inputs');
+                target.closest('.inner-dynamic-group').remove();
             }
         })
     }
